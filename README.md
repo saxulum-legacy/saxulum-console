@@ -30,7 +30,7 @@ $app->register(new ConsoleProvider());
 Usage
 -----
 
-Register a Command
+Register a command
 
 ``` {.php}
 $app['console.commands'] = $app->share(
@@ -40,6 +40,12 @@ $app['console.commands'] = $app->share(
         return $commands;
     })
 );
+```
+
+Run the console
+
+``` {.php}
+$app['console']->run();
 ```
 
 Copyright
