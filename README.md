@@ -33,11 +33,11 @@ Usage
 Register a command
 
 ``` {.php}
-$app['console.commands'] = $app->share(
-    $app->extend('console.commands', function (array $commands) use ($container) {
-        $commands[] = new SampleCommand();
+$app['console'] = $app->share(
+    $app->extend('console', function (Application $console) use ($app) {
+        $console->add(new SampleCommand(null, $app));
 
-        return $commands;
+        return $console;
     })
 );
 ```
@@ -45,6 +45,7 @@ $app['console.commands'] = $app->share(
 Run the console
 
 ``` {.php}
+$app->boot();
 $app['console']->run();
 ```
 

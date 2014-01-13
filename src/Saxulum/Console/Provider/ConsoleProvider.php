@@ -2,7 +2,7 @@
 
 namespace Saxulum\Console\Provider;
 
-use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Application as ConsoleApplication;
 
 class ConsoleProvider
 {
@@ -11,13 +11,8 @@ class ConsoleProvider
      */
     public function register(\Pimple $container)
     {
-        $container['console.commands'] = array();
-
-        $container['console'] = $container->share(function () use($container) {
-            $console = new Application();
-            foreach($container['console.commands'] as $command) {
-                $console->add($command);
-            }
+        $container['console'] = $container->share(function () use ($container) {
+            $console = new ConsoleApplication();
 
             return $console;
         });
