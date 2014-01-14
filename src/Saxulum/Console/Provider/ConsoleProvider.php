@@ -11,8 +11,17 @@ class ConsoleProvider
      */
     public function register(\Pimple $container)
     {
+        $container['console.commands'] = $container->share(function () use ($container) {
+            $commands = array();
+
+            return $commands;
+        });
+
         $container['console'] = $container->share(function () use ($container) {
             $console = new ConsoleApplication();
+            foreach ($container['console.commands'] as $command) {
+                $console->add($command);
+            }
 
             return $console;
         });
