@@ -21,7 +21,7 @@ Requirements
 Installation
 ------------
 
-Through [Composer](http://getcomposer.org) as [saxulum/saxulum/saxulum-console][1].
+Through [Composer](http://getcomposer.org) as [saxulum/saxulum-console][1].
 
 ``` {.php}
 $app->register(new ConsoleProvider());
