@@ -51,7 +51,7 @@ class ConsoleProvider
                 $commandsMap = $container['console.command.search']();
             }
 
-            foreach($commandsMap as $commandClass) {
+            foreach ($commandsMap as $commandClass) {
                 $console->add(new $commandClass(null, $container));
             }
 
@@ -60,11 +60,11 @@ class ConsoleProvider
 
         $container['console.command.search'] = $container->protect(function () use ($container) {
             $commandsMap = array();
-            foreach($container['console.command.paths'] as $path) {
+            foreach ($container['console.command.paths'] as $path) {
                 foreach (Finder::create()->files()->name('*.php')->in($path) as $file) {
                     /** @var SplFileInfo $file */
                     $classes = ClassFinder::findClasses($file->getContents());
-                    foreach($classes as $class) {
+                    foreach ($classes as $class) {
                         $reflectionClass = new \ReflectionClass($class);
                         if($reflectionClass->isSubclassOf('Saxulum\Console\Command\AbstractCommand') &&
                             $reflectionClass->isInstantiable()) {
