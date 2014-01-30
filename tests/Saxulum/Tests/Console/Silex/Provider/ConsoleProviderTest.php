@@ -38,4 +38,62 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('this is a sample command with value: value', $output->fetch());
     }
+
+    public function testWithCache()
+    {
+        $app = new Application();
+        $app['debug'] = true;
+
+        $app->register(new ConsoleProvider(), array(
+            'console.cache' => __DIR__ . '/../../../../../../cache'
+        ));
+
+        $app['console.command.paths'] = $app->share($app->extend('console.command.paths', function ($paths) {
+            $paths[] = __DIR__ . '/../../Command';
+
+            return $paths;
+        }));
+
+        $app->boot();
+
+        $input = new ArrayInput(array(
+            'command' => 'sample:command',
+            'value' => 'value'
+        ));
+
+        $output = new BufferedOutput();
+
+        $app['console']->setAutoExit(false);
+        $app['console']->run($input, $output);
+
+        $this->assertEquals('this is a sample command with value: value', $output->fetch());
+    }
+
+    public function testWithoutCache()
+    {
+        $app = new Application();
+        $app['debug'] = true;
+
+        $app->register(new ConsoleProvider());
+
+        $app['console.command.paths'] = $app->share($app->extend('console.command.paths', function ($paths) {
+            $paths[] = __DIR__ . '/../../Command';
+
+            return $paths;
+        }));
+
+        $app->boot();
+
+        $input = new ArrayInput(array(
+            'command' => 'sample:command',
+            'value' => 'value'
+        ));
+
+        $output = new BufferedOutput();
+
+        $app['console']->setAutoExit(false);
+        $app['console']->run($input, $output);
+
+        $this->assertEquals('this is a sample command with value: value', $output->fetch());
+    }
 }
