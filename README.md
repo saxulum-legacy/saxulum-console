@@ -6,6 +6,7 @@ saxulum-console
 [![Build Status](https://api.travis-ci.org/saxulum/saxulum-console.png?branch=master)](https://travis-ci.org/saxulum/saxulum-console)
 [![Total Downloads](https://poser.pugx.org/saxulum/saxulum-console/downloads.png)](https://packagist.org/packages/saxulum/saxulum-console)
 [![Latest Stable Version](https://poser.pugx.org/saxulum/saxulum-console/v/stable.png)](https://packagist.org/packages/saxulum/saxulum-console)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/saxulum/saxulum-console/badges/quality-score.png?s=42d324c8e36fb426f1c8a1823d9ef63f61742b18)](https://scrutinizer-ci.com/g/saxulum/saxulum-console/)
 
 Features
 --------
