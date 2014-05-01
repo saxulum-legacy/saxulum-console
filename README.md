@@ -58,7 +58,9 @@ Usage
 ``` {.php}
 $app['console.commands'] = $app->share(
     $app->extend('console.commands', function ($commands) use ($app) {
-        $commands[] = new SampleCommand(null, $app);
+        $command = new SampleCommand;
+        $command->setContainer($app);
+        $commands[] = $command;
 
         return $commands;
     })
@@ -67,7 +69,7 @@ $app['console.commands'] = $app->share(
 
 ### Register a path
 
-One of their parent classes has to be: Saxulum\Console\Command\AbstractCommand
+One of their parent classes has to be: Saxulum\Console\Command\AbstractPimpleCommand
 
 
 ``` {.php}
