@@ -3,6 +3,7 @@
 namespace Saxulum\Console\Provider;
 
 use Saxulum\ClassFinder\ClassFinder;
+use Saxulum\Console\Command\AbstractPimpleCommand;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -31,6 +32,9 @@ class ConsoleProvider
         $container['console'] = $container->share(function () use ($container) {
             $console = new ConsoleApplication();
             foreach ($container['console.commands'] as $command) {
+                if ($command instanceof AbstractPimpleCommand) {
+                    $command->setContainer($container);
+                }
                 $console->add($command);
             }
 
@@ -52,7 +56,11 @@ class ConsoleProvider
             }
 
             foreach ($commandsMap as $commandClass) {
-                $console->add(new $commandClass(null, $container));
+                /** @var AbstractPimpleCommand $command */
+                $command = new $commandClass;
+                $command->setContainer($container);
+
+                $console->add($command);
             }
 
             return $console;
@@ -66,7 +74,7 @@ class ConsoleProvider
                     $classes = ClassFinder::findClasses($file->getContents());
                     foreach ($classes as $class) {
                         $reflectionClass = new \ReflectionClass($class);
-                        if($reflectionClass->isSubclassOf('Saxulum\Console\Command\AbstractCommand') &&
+                        if($reflectionClass->isSubclassOf('Saxulum\Console\Command\AbstractPimpleCommand') &&
                             $reflectionClass->isInstantiable()) {
                             $commandsMap[] = $class;
                         }

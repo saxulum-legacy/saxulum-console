@@ -2,12 +2,12 @@
 
 namespace Saxulum\Tests\Console\Command;
 
-use Saxulum\Console\Command\AbstractCommand;
+use Saxulum\Console\Command\AbstractPimpleCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SampleCommand extends AbstractCommand
+class SampleCommand extends AbstractPimpleCommand
 {
     protected function configure()
     {

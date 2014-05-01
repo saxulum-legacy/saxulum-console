@@ -5,6 +5,7 @@ namespace Saxulum\Tests\Console\Silex\Provider;
 use Saxulum\Console\Silex\Provider\ConsoleProvider;
 use Saxulum\Tests\Console\Command\SampleCommand;
 use Silex\Application;
+use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
@@ -18,7 +19,9 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
 
         $app['console.commands'] = $app->share(
             $app->extend('console.commands', function ($commands) use ($app) {
-                $commands[] = new SampleCommand(null, $app);
+                $command = new SampleCommand;
+                $command->setContainer($app);
+                $commands[] = $command;
 
                 return $commands;
             })
@@ -33,8 +36,11 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
 
         $output = new BufferedOutput();
 
-        $app['console']->setAutoExit(false);
-        $app['console']->run($input, $output);
+        /** @var ConsoleApplication $console */
+        $console = $app['console'];
+
+        $console->setAutoExit(false);
+        $console->run($input, $output);
 
         $this->assertEquals('this is a sample command with value: value', $output->fetch());
     }
@@ -63,8 +69,11 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
 
         $output = new BufferedOutput();
 
-        $app['console']->setAutoExit(false);
-        $app['console']->run($input, $output);
+        /** @var ConsoleApplication $console */
+        $console = $app['console'];
+
+        $console->setAutoExit(false);
+        $console->run($input, $output);
 
         $this->assertEquals('this is a sample command with value: value', $output->fetch());
     }
@@ -91,8 +100,11 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
 
         $output = new BufferedOutput();
 
-        $app['console']->setAutoExit(false);
-        $app['console']->run($input, $output);
+        /** @var ConsoleApplication $console */
+        $console = $app['console'];
+
+        $console->setAutoExit(false);
+        $console->run($input, $output);
 
         $this->assertEquals('this is a sample command with value: value', $output->fetch());
     }
