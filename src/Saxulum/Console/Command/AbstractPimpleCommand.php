@@ -13,6 +13,6 @@ abstract class AbstractPimpleCommand extends Command
 
     public function setContainer(\Pimple $container)
     {
-
+        $this->container = $container;
     }
 }
