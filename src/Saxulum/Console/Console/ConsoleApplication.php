@@ -33,9 +33,8 @@ class ConsoleApplication extends BaseConsoleApplication
         $this->getDefinition()->addOption(
             new InputOption(
                 '--no-debug', null,
-                InputOption::VALUE_OPTIONAL,
-                'Switches off debug mode.',
-                isset($this->container['debug']) ? $this->container['debug'] : true
+                InputOption::VALUE_NONE,
+                'Switches off debug mode.'
             )
         );
     }
@@ -56,7 +55,7 @@ class ConsoleApplication extends BaseConsoleApplication
     public function configureIO(InputInterface $input, OutputInterface $output)
     {
         $this->container['env'] = $input->getParameterOption(array('--env', '-e'));
-        $this->container['debug'] = $input->getParameterOption(array('--no-debug'));
+        $this->container['debug'] = $this->container['env'] === 'prod' || $input->hasParameterOption(array('--no-debug'));
 
         parent::configureIO($input, $output);
     }
