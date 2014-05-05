@@ -58,8 +58,8 @@ class ConsoleApplication extends BaseConsoleApplication
      */
     public function configureIO(InputInterface $input, OutputInterface $output)
     {
-        $this->container['env'] = $input->getParameterOption(array('--env', '-e'), 'dev');
-        $this->container['debug'] = ($input->hasParameterOption('--no-debug') || $this->container['env'] === 'prod' || getenv('APP_DEBUG') === '1') ? false : true;
+        $this->container['env'] = $input->getParameterOption(array('--env', '-e'));
+        $this->container['debug'] = ($input->hasParameterOption('--no-debug') || $this->container['env'] === 'prod') ? false : true;
 
         parent::configureIO($input, $output);
     }
