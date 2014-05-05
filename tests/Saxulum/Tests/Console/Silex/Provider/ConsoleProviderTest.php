@@ -48,7 +48,6 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
     public function testWithCache()
     {
         $app = new Application();
-        $app['debug'] = true;
 
         $app->register(new ConsoleProvider(), array(
             'console.cache' => __DIR__ . '/../../../../../../cache'
@@ -81,7 +80,6 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
     public function testWithoutCache()
     {
         $app = new Application();
-        $app['debug'] = true;
 
         $app->register(new ConsoleProvider());
 
