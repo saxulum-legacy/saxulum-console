@@ -53,13 +53,13 @@ class ConsoleApplication extends BaseConsoleApplication
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     public function configureIO(InputInterface $input, OutputInterface $output)
     {
-        $this->container['env'] = $input->getParameterOption(array('--env', '-e'));
-        $this->container['debug'] = ($input->hasParameterOption('--no-debug') || $this->container['env'] === 'prod') ? false : true;
+        $this->container['env'] = $input->getParameterOption(array('--env', '-e'), getenv('APP_ENV') ?: 'dev');
+        $this->container['debug'] = getenv('APP_DEBUG') !== '0' && !$input->hasParameterOption(array('--no-debug', '')) && $this->container['env'] !== 'prod';
 
         parent::configureIO($input, $output);
     }
