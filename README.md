@@ -17,6 +17,7 @@ Requirements
 ------------
 
  * PHP 5.3+
+ * Pimple 2.1+
  * Saxulum ClassFinder 1.0+
  * Symfony Console 2.3+
  * Symfony Finder 2.3+
@@ -27,14 +28,16 @@ Installation
 Through [Composer](http://getcomposer.org) as [saxulum/saxulum-console][1].
 
 ``` {.php}
-$app->register(new ConsoleProvider());
+$container->register(new ConsoleProvider());
 ```
 ### With translation cache (faster)
 
 ```{.php}
+use Pimple\Container;
 use Saxulum\Console\Silex\Provider\ConsoleProvider;
 
-$app->register(new ConsoleProvider(), array(
+$container = new Container();
+$container->register(new ConsoleProvider(), array(
     'console.cache' => '/path/to/cache'
 ));
 ```
@@ -45,9 +48,11 @@ $app->register(new ConsoleProvider(), array(
 ### Without translation cache (slower)
 
 ```{.php}
+use Pimple\Container;
 use Saxulum\Console\Silex\Provider\ConsoleProvider;
 
-$app->register(new ConsoleProvider());
+$container = new Container();
+$container->register(new ConsoleProvider());
 ```
 
 Usage
@@ -56,15 +61,13 @@ Usage
 ### Register a command
 
 ``` {.php}
-$app['console.commands'] = $app->share(
-    $app->extend('console.commands', function ($commands) use ($app) {
-        $command = new SampleCommand;
-        $command->setContainer($app);
-        $commands[] = $command;
+$container['console.commands'] = $container->extend('console.commands', function ($commands) use ($container) {
+    $command = new SampleCommand;
+    $command->setContainer($container);
+    $commands[] = $command;
 
-        return $commands;
-    })
-);
+    return $commands;
+});
 ```
 
 ### Register a path
@@ -73,18 +76,17 @@ One of their parent classes has to be: Saxulum\Console\Command\AbstractPimpleCom
 
 
 ``` {.php}
-$app['console.command.paths'] = $app->share($app->extend('console.command.paths', function ($paths) {
+$container['console.command.paths'] = $container->extend('console.command.paths', function ($paths) {
     $paths[] = __DIR__ . '/../../Command';
 
     return $paths;
-}));
+});
 ```
 
 Run the console
 
 ``` {.php}
-$app->boot();
-$app['console']->run();
+$container['console']->run();
 ```
 
 Copyright

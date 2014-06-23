@@ -2,33 +2,35 @@
 
 namespace Saxulum\Console\Provider;
 
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 use Saxulum\ClassFinder\ClassFinder;
 use Saxulum\Console\Console\ConsoleApplication;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-class ConsoleProvider
+class ConsoleProvider implements ServiceProviderInterface
 {
     /**
-     * @param \Pimple $container
+     * @param Container $container
      */
-    public function register(\Pimple $container)
+    public function register(Container $container)
     {
         $container['console.cache'] = null;
 
-        $container['console.command.paths'] = $container->share(function () {
+        $container['console.command.paths'] = function () {
             $paths = array();
 
             return $paths;
-        });
+        };
 
-        $container['console.commands'] = $container->share(function () use ($container) {
+        $container['console.commands'] = function () use ($container) {
             $commands = array();
 
             return $commands;
-        });
+        };
 
-        $container['console'] = $container->share(function () use ($container) {
+        $container['console'] = function () use ($container) {
             $console = new ConsoleApplication($container);
             foreach ($container['console.commands'] as $command) {
                 $console->add($command);
@@ -57,7 +59,7 @@ class ConsoleProvider
             }
 
             return $console;
-        });
+        };
 
         $container['console.command.search'] = $container->protect(function () use ($container) {
             $commandsMap = array();

@@ -2,6 +2,7 @@
 
 namespace Saxulum\Console\Console;
 
+use Pimple\Container;
 use Saxulum\Console\Command\AbstractPimpleCommand;
 use Symfony\Component\Console\Application as BaseConsoleApplication;
 use Symfony\Component\Console\Command\Command;
@@ -16,7 +17,7 @@ class ConsoleApplication extends BaseConsoleApplication
      */
     protected $container;
 
-    public function __construct(\Pimple $container)
+    public function __construct(Container $container)
     {
         parent::__construct();
 

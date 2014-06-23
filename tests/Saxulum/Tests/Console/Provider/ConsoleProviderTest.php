@@ -2,9 +2,9 @@
 
 namespace Saxulum\Tests\Console\Silex\Provider;
 
-use Saxulum\Console\Silex\Provider\ConsoleProvider;
+use Pimple\Container;
+use Saxulum\Console\Provider\ConsoleProvider;
 use Saxulum\Tests\Console\Command\SampleCommand;
-use Silex\Application;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -13,21 +13,18 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testConsole()
     {
-        $app = new Application();
+        $container = new Container();
+        $container['debug'] = true;
 
-        $app->register(new ConsoleProvider());
+        $container->register(new ConsoleProvider());
 
-        $app['console.commands'] = $app->share(
-            $app->extend('console.commands', function ($commands) use ($app) {
-                $command = new SampleCommand;
-                $command->setContainer($app);
-                $commands[] = $command;
+        $container['console.commands'] = $container->extend('console.commands', function ($commands) use ($container) {
+            $command = new SampleCommand;
+            $command->setContainer($container);
+            $commands[] = $command;
 
-                return $commands;
-            })
-        );
-
-        $app->boot();
+            return $commands;
+        });
 
         $input = new ArrayInput(array(
             'command' => 'sample:command',
@@ -37,7 +34,7 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
         $output = new BufferedOutput();
 
         /** @var ConsoleApplication $console */
-        $console = $app['console'];
+        $console = $container['console'];
 
         $console->setAutoExit(false);
         $console->run($input, $output);
@@ -47,19 +44,18 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testWithCache()
     {
-        $app = new Application();
+        $container = new Container();
+        $container['debug'] = true;
 
-        $app->register(new ConsoleProvider(), array(
-            'console.cache' => __DIR__ . '/../../../../../../cache'
+        $container->register(new ConsoleProvider(), array(
+            'console.cache' => __DIR__ . '/../../../../cache'
         ));
 
-        $app['console.command.paths'] = $app->share($app->extend('console.command.paths', function ($paths) {
-            $paths[] = __DIR__ . '/../../Command';
+        $container['console.command.paths'] = $container->extend('console.command.paths', function ($paths) {
+            $paths[] = __DIR__ . '/../Command';
 
             return $paths;
-        }));
-
-        $app->boot();
+        });
 
         $input = new ArrayInput(array(
             'command' => 'sample:command',
@@ -69,7 +65,7 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
         $output = new BufferedOutput();
 
         /** @var ConsoleApplication $console */
-        $console = $app['console'];
+        $console = $container['console'];
 
         $console->setAutoExit(false);
         $console->run($input, $output);
@@ -79,17 +75,16 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testWithoutCache()
     {
-        $app = new Application();
+        $container = new Container();
+        $container['debug'] = true;
 
-        $app->register(new ConsoleProvider());
+        $container->register(new ConsoleProvider());
 
-        $app['console.command.paths'] = $app->share($app->extend('console.command.paths', function ($paths) {
-            $paths[] = __DIR__ . '/../../Command';
+        $container['console.command.paths'] = $container->extend('console.command.paths', function ($paths) {
+            $paths[] = __DIR__ . '/../Command';
 
             return $paths;
-        }));
-
-        $app->boot();
+        });
 
         $input = new ArrayInput(array(
             'command' => 'sample:command',
@@ -99,7 +94,7 @@ class ConsoleProviderTest extends \PHPUnit_Framework_TestCase
         $output = new BufferedOutput();
 
         /** @var ConsoleApplication $console */
-        $console = $app['console'];
+        $console = $container['console'];
 
         $console->setAutoExit(false);
         $console->run($input, $output);
