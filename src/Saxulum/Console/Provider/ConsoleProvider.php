@@ -34,7 +34,7 @@ class ConsoleProvider implements ServiceProviderInterface
             $console = new ConsoleApplication($container);
 
             // automatically detect dispatcher (e.g. in Silex applications)
-            if (!is_null($container['dispatcher'])) {
+            if (isset($container['dispatcher']) && !is_null($container['dispatcher'])) {
                 $console->setDispatcher($container['dispatcher']);
             }
             
