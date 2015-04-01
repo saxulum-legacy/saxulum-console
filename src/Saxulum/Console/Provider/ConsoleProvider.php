@@ -32,6 +32,12 @@ class ConsoleProvider implements ServiceProviderInterface
 
         $container['console'] = function () use ($container) {
             $console = new ConsoleApplication($container);
+
+            // automatically detect dispatcher (e.g. in Silex applications)
+            if (isset($container['dispatcher']) && !is_null($container['dispatcher'])) {
+                $console->setDispatcher($container['dispatcher']);
+            }
+            
             foreach ($container['console.commands'] as $command) {
                 $console->add($command);
             }
