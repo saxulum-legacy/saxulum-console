@@ -30,6 +30,11 @@ class ConsoleProvider
 
         $container['console'] = $container->share(function () use ($container) {
             $console = new ConsoleApplication($container);
+
+            if (isset($container['dispatcher']) && !is_null($container['dispatcher'])) {
+                $console->setDispatcher($container['dispatcher']);
+            }
+
             foreach ($container['console.commands'] as $command) {
                 $console->add($command);
             }
